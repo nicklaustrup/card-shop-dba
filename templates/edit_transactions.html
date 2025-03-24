@@ -1,0 +1,142 @@
+<!-- # Citation for the following code:
+# Date: 05/19/2024
+# Copied from: CS 340 Flask Guide
+# Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app -->
+
+{% extends "base.html" %}
+
+{% block header %} Transactions {% endblock %}
+
+        {% block content %}
+
+
+        <script>
+
+            var customerData = {{ data["customers"] | tojson | safe }};
+            var employeeData = {{ data["employees"] | tojson | safe }};
+            var productData = {{ data["products"] | tojson | safe }};
+        </script>
+        <!-- <input type="hidden"  id="productData" value=productData> -->
+
+        <div id="browse">
+            {% with data=data["transactions"] %}
+                {% include "edit_table.html" %}
+            {% endwith %}
+            
+            {% set customerID = data["transactions"][0]["customerID"] %}
+            {% set employeeID = data["transactions"][0]["employeeID"] %}
+            {% set productsList = data["products"] %}
+            {% set transDate = data["transactions"][0]["transactionDate"] %}
+            {% set transTime = data["transactions"][0]["transactionTime"] %}
+            {% set transactionID = data["transactions"][0]["transactionID"] %}
+
+        <p>&nbsp;</p>
+        </div>	<!-- browse -->
+
+                <div id="edit">
+                    <!-- form to edit data in Transactions-->
+                    <form id="editTransaction" action="/edit_transactions/{{ transactionID }}" method="post">
+                        <legend>Update Fields:</legend>
+                        <fieldset>
+                            <!-- We can preset form inputs to match attributes currently stored for 'transactionID' of Employee to be updated via value= and accessing our passed data tuple -->
+                            <h3>Update Date &amp; Time</h3>
+                                <!-- date-->
+                                <label for="transactionDate">Purchase Date</label>
+                                <input type="date" id="transactionDate" name="transactionDate" value="{{ transDate }}" required/>
+
+                                <!-- time -->
+                                <label for="transactionTime">Time of Purchase</label>
+                                <input type="time" id="transactionTime" name="transactionTime" value="{{ transTime }}" step="1" required/>
+
+                            <h3>Update Customer</h3>
+                            <label for="selectCustomer">Select Customer</label>
+                            <select id="selectCustomer" name="customer">
+                            <!--     Dynamically Generate Customers Dropdown     -->
+                                {% with data=data["customers"] %}    
+                                    {% for item in data %}
+                                        <!-- Create a <option> element with the value of that key as its ID -->
+                                        <option {% if item["customerID"] == customerID  %}selected{% endif %} value="{{item["customerID"]}}">{{item["firstName"]}} {{item["lastName"]}}</option>
+                                     
+                                    <!-- End of this for loop -->
+                                    {% endfor %}
+                                {% endwith %}
+                            </select>
+
+                            <h3>Update Employee</h3>
+                            <label for="selectEmployee">Select Employee</label>
+                            <select id="selectEmployee" name="employee">
+                            <!--     Dynamically Generate Employee Dropdown     -->
+                                {% with data=data["employees"] %}    
+                                    {% for item in data %}
+                                        <!-- Create a <option> element with the value of that key as its ID -->
+                                        <option {% if item["employeeID"] == employeeID  %}selected{% endif %} value="{{item["employeeID"]}}">{{item["firstName"]}} {{item["lastName"]}}</option>
+                        
+                                    <!-- End of this for loop -->
+                                    {% endfor %}
+                                {% endwith %}
+                            </select>
+
+                            <h3>Update Products</h3>
+                            <p>Current Products in Transaction:</p>
+                            <div id="productPlaceholder">
+                            {% with data=data["transactions"] %}
+                                {% for transaction in data %}
+                                {% set productID = transaction["productID"] %}
+                                {% set loopID = loop.index + productID %}
+                                <div id="{{ loopID }}">
+                                    <label>Choose Product:
+                                    <select name="product">
+                                    <!--     Dynamically Generate Products Dropdown     -->
+                                            {% for product in productsList %}
+                                                <!-- Create a <option> element with the value of that key in it -->
+                                                <option {% if product["productID"] == productID  %}selected{% endif %} value="{{product["productID"]}}">{{product["name"]}}</option>
+                                            
+                                                <!-- End of this for loop -->
+                                            {% endfor %}
+                                    </select>
+                                </label>
+                                    {% if loop.index > 1 %}
+                                    <input type="button" value="Remove" onclick=removeAddedProduct({{loopID}}) />
+                                    {% endif %}
+                            </div>
+                            {% endfor %}
+                            {% endwith %}
+                            </div>           
+                            <!-- choose another product -->
+                            <input type="button" onclick="addProduct()" value="Add Another Product" />
+                
+            
+                            <script>
+                                function addProduct(){
+                                    var productPlaceholder = document.getElementById('productPlaceholder');
+                                    let counter = 1
+                                    var newDropdown = document.createElement('select');
+                                    newDropdown.setAttribute('name', 'product');
+                                    productData.forEach(function(item) {
+                                        var option = document.createElement('option');
+                                        option.value = item.productID;
+                                        option.text = item.name;
+                                        newDropdown.appendChild(option);
+                                    });
+                                    const newD = document.createElement('div');
+                                    newD.setAttribute('id', counter);
+                                    productPlaceholder.appendChild(newD).innerText = "Choose Product: ";
+                                    newD.appendChild(newDropdown);
+                                    newD.innerHTML += ` <input type="button" value="Remove" onclick=removeAddedProduct(${counter}) />`
+                                    counter += 1;
+                                }
+        
+                                function removeAddedProduct(id){
+                                    const parent = document.getElementById('productPlaceholder');
+                                    const child = document.getElementById(id);
+                                    parent.removeChild(child);
+                                }
+                            </script>
+
+                        
+                        </fieldset>
+                        <button type="submit" value="Edit Transaction" name="Edit_Transaction" class="btn btn-primary" style="margin:.5rem;">Save Changes</button>
+                        <input type="button" class="btn" value="cancel" a href='/transactions'>
+                    </form>
+
+{% endblock %}

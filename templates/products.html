@@ -1,0 +1,50 @@
+<!-- # Citation for the following code:
+# Date: 05/19/2024
+# Copied from: CS 340 Flask Guide
+# Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app -->
+    
+{% extends "base.html" %}
+
+{% block header %} Products {% endblock %}
+
+        {% block content %}
+
+        <div id="browse">
+            {% include "table.html" %}
+        <p>&nbsp;</p>
+        </div>	<!-- browse -->
+        
+         <div id="insert">
+            <!-- form to INSERT new data into product-->
+            <form id="insertProduct" action="/products" method="post">
+                <legend><strong>Add Product</strong></legend>
+                <fieldset>
+                    <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
+                    <label for="type">product type:</label>
+                    {# <input type="text" class="form-control" id="type" name="type" pattern="[A-Za-z]{1,}" placeholder="card, snack, apparel" required> #}
+                    <select name="type">
+                        <option value="Cards">Cards</option>
+                        <option value="Snacks">Snacks</option>
+                        <option value="Apparel">Apparel</option>
+                    </select>
+
+                    <label for="name">product name:</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Pikachu, Doritos, etc" required>
+
+                    <label for="price">price:</label>
+                    <input type="number" class="form-control" id="price" name="price" min="0" step="0.01" title="Currency" pattern="^\d*(\.\d{0,2})?$" placeholder="0.00" required>
+
+                    <label for="inStock">item in stock:</label>
+                    <input type="radio" class="form-control" id="inStock1" name="inStock" value="1"  required>in stock</input> 
+                    <input type="radio" class="form-control" id="inStock0" name="inStock" value="0">out of stock</input> 
+
+
+                </fieldset>
+
+                <!-- Create 'Add Product' and 'Cancel' buttons -->
+                <input type="submit" value="Add Product" name="Add_Product" class="btn btn-primary" style="margin:.5rem;">
+                <button type="submit" id="cancel" href="/products">Cancel</button> 
+            </form>
+        </div><!--insert-->
+
+        {% endblock %}

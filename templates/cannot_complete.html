@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block header %}{{ who }}{% endblock %}
+
+{% block content %}
+
+<h2>
+    Cannot Complete Action
+</h2>
+
+<p>
+    Cannot delete {{ who }} with an active Transaction record. Remove transaction record before continuing.
+</p>
+
+
+{% endblock %}

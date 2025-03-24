@@ -1,0 +1,45 @@
+<!-- # Citation for the following code:
+# Date: 05/19/2024
+# Copied from: CS 340 Flask Guide
+# Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app -->
+    
+{% extends "base.html" %}
+
+{% block header %} Employees {% endblock %}
+
+        {% block content %}
+
+        <div id="browse">
+            {% include "table.html" %}
+        <p>&nbsp;</p>
+        </div>	<!-- browse -->
+        
+         <div id="insert">
+            <!-- form to INSERT new data into employees-->
+            <form id="insertEmployee" action="/employees" method="post">
+                <legend><strong>Add Employee</strong></legend>
+                <fieldset>
+                    <!-- placeholder shows ghost text, required forces an input, pattern forces input adherence -->
+                    <label for="firstName">first name:</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" pattern="[A-Za-z]{1,}" placeholder="First" required>
+
+                    <label for="lastName">last name:</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" pattern="[A-Za-z0-9]{1,}" placeholder="Last" required>
+
+                    <label for="email">email:</label>
+                    <input type="email" class="form-control" id="email" name="email" pattern="[^ @]+@[^ @]+.[a-z]+" placeholder="name@host.com" required>
+
+                    <label for="phone">phone:</label>
+                    <input type="text" class="form-control" id="phone" name="phone" pattern="[A-Za-z0-9]{1,}" placeholder="555-555-5555"> 
+
+                    <label for="wage">wage:</label>
+                    <input type="text" class="form-control" id="wage" name="wage"placeholder="123 Main St"> 
+                </fieldset>
+
+                <!-- Create 'Add Employee' and 'Cancel' buttons -->
+                <input type="submit" value="Add Employee" name="Add_Employee" class="btn btn-primary" style="margin:.5rem;">
+                <button type="submit" id="cancel" href="/employees">Cancel</button> 
+            </form>
+        </div><!--insert-->
+
+        {% endblock %}

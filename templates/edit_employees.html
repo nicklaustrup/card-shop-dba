@@ -1,0 +1,47 @@
+<!-- # Citation for the following code:
+# Date: 05/19/2024
+# Copied from: CS 340 Flask Guide
+# Source URL: https://github.com/osu-cs340-ecampus/flask-starter-app -->
+
+{% extends "base.html" %}
+
+{% block header %} Employees {% endblock %}
+
+{% block content %}
+
+<div id="browse">
+    {% include "edit_table.html" %}
+<p>&nbsp;</p>
+</div>	<!-- browse -->
+
+        <div id="edit">
+            <!-- form to edit data in Employees-->
+            <form id="editEmployee" action="/edit_employees/{{data[0].employeeID}}" method="post">
+                <legend>Update Fields:</legend>
+                <fieldset>
+                    <!-- We can preset form inputs to match attributes currently stored for 'employeeID' of Employee to be updated via value= and accessing our passed data tuple -->
+                    <!-- Create hidden form input to store the passed 'employeeID' of the Employee we are editing so we can access it easily in our 'POST' method in our app.py -->
+                    <input type="hidden" value="{{data[0].employeeID}}" class="form-control" id="employeeID" name="employeeID" required>
+                    
+                    <label for="firstName">first name:</label>
+                    <input type="text" value="{{data[0].firstName}}" class="form-control" id="firstName" name="firstName" pattern="[A-Za-z]{1,}" required>
+                    
+                    <label for="lastName">last name:</label>
+                    <input type="text" value="{{data[0].lastName}}" class="form-control" id="lastName" name="lastName" pattern="[A-Za-z0-9]{1,}" required>
+                    
+                    <label for="email">email:</label>
+                    <input type="email" value="{{data[0].email}}" class="form-control" id="email" name="email" pattern="[^ @]+@[^ @]+.[a-z]+" required>
+                    
+                    <label for="phone">phone:</label>
+                    <input type="text" value="{{data[0].phone}}" class="form-control" id="phone" name="phone" pattern="^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$" placeholder="555-555-5555"> 
+                    
+                    <label for="wage">wage:</label>
+                    <input type="text" value="{{data[0].wage}}" class="form-control" id="wage" name="wage"> 
+
+                
+                </fieldset>
+                <input type="submit" value="Edit Employee" name="Edit_Employee" class="btn btn-primary" style="margin:.5rem;">
+                <a href='/employees'><input class="btn" type="button" value="cancel"></a>
+            </form>
+
+{% endblock %}
